@@ -3227,7 +3227,9 @@ mz_bool mz_zip_writer_add_mem_ex_v2(mz_zip_archive *pZip, const char *pArchive_n
             pState->m_zip64 = MZ_TRUE;
             /*return mz_zip_set_error(pZip, MZ_ZIP_TOO_MANY_FILES); */
         }
-        if (((mz_uint64)buf_size > 0xFFFFFFFF) || (uncomp_size > 0xFFFFFFFF))
+        /* XXX: Fix for broken MinGW */
+        mz_uint64 buf_size_as_u64 = buf_size;
+        if ((buf_size_as_u64 > 0xFFFFFFFF) || (uncomp_size > 0xFFFFFFFF))
         {
             pState->m_zip64 = MZ_TRUE;
             /*return mz_zip_set_error(pZip, MZ_ZIP_ARCHIVE_TOO_LARGE); */

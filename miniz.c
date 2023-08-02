@@ -322,7 +322,9 @@ int mz_compress2(unsigned char *pDest, mz_ulong *pDest_len, const unsigned char 
     memset(&stream, 0, sizeof(stream));
 
     /* In case mz_ulong is 64-bits (argh I hate longs). */
-    if ((mz_uint64)(source_len | *pDest_len) > 0xFFFFFFFFU)
+    /* XXX: Fix for broken MinGW */
+    mz_uint64 is_param_error = source_len | *pDest_len;
+    if (is_param_error > 0xFFFFFFFFU)
         return MZ_PARAM_ERROR;
 
     stream.next_in = pSource;
@@ -565,7 +567,9 @@ int mz_uncompress2(unsigned char *pDest, mz_ulong *pDest_len, const unsigned cha
     memset(&stream, 0, sizeof(stream));
 
     /* In case mz_ulong is 64-bits (argh I hate longs). */
-    if ((mz_uint64)(*pSource_len | *pDest_len) > 0xFFFFFFFFU)
+    /* XXX: Fix for broken MinGW */
+    mz_uint64 is_param_error = *pSource_len | *pDest_len;
+    if (is_param_error > 0xFFFFFFFFU)
         return MZ_PARAM_ERROR;
 
     stream.next_in = pSource;
